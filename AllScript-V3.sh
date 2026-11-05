@@ -1,0 +1,27 @@
+#!/bin/sh
+# AllScript V3 - Compact Encrypted - Ahmed Abdel-Moati
+cat > /tmp/e.xor <<'ENDOFFILE'
+eXt1ODM0dSkyUHl6GzY2CTkoMyouegxpend6GzI3Pz5QPzkyNXp4Z2dnZ2dnZ2dn
+Z2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dneFA/OTI1enh6GzY2CTko
+Myouegxpend6GzI3Pz56Gzg+PzZ3FzU7LjN4UD85MjV6eGdnZ2dnZ2dnZ2dnZ2dn
+Z2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ3hQMzx6AXp3PHp1Py45dSwuMyw/
+KCkzNTR6B2F6LjI/NHoTFx1neAwvcXhhej82Mzx6AXp3PHp1Py45dTQ1LDs2Pyh3
+LD8oKTM1NHoHYXouMj80ehMXHWd4FDUsOzY/KHhhej82Mzx6AXp3PHp1Py45dTUq
+PzQ7Lix3LD8oKTM1NHoHYXouMj80ehMXHWd4FSo/NBsODHhhej82Mzx6AXp3PHp1
+Py45dTUqPzQqNjN3LD8oKTM1NHoHYXouMj80ehMXHWd4FSo/NAoWM3hhej82Mzx6
+AXp3PHp1Py45dT89Ozczdyw/KCkzNTR6B2F6LjI/NHoTFx1neB89OzczeGF6PzYz
+PHoBenc8enU/Ljl1ODY7OTEyNTY/dyw/KCkzNTR6B2F6LjI/NHoTFx1neBg2Ozkx
+EjU2P3hhej82Mzx6AXp3PHp1Py45dTUqPzQsMyJ3LD8oKTM1NHoHYXouMj80ehMX
+HWd4FSo/NAwzAnhhej82KT96ExcdZ3gPNDE0NS00eGF6PDNQPzkyNXp4Z2R6fhMX
+HXoePy4/OS4/PnhQMzx6e3o5NTc3OzQ+encseiojLjI1NGl6ZHU+Pyx1NC82Nnpo
+ZHxrYXouMj80ejUqMT16Lyo+Oy4/enx8ejUqMT16MzQpLjs2NnoqIy4yNTRpYXo8
+M1A1KjE9ei8qPjsuP1A1KjE9ejM0KS47NjZ6OS8oNnotPT8uejg7KTJ6PzQzPTc7
+aHcqNi89MzR3PyIuPzQpMzU0KXc7MCo7ND82ej80Mz03O2h3KjYvPTM0dz8iLj80
+KTM1NCl3Pyo9MzcqNSguUDY0encpPHp1LykodSkyOyg/dSA1ND8zNDw1dRs8KDM5
+O3UZOzMoNXp1Py45dTY1OTs2LjM3P1A/OTI1engbPCgzOTt1GTszKDV4emR6dT8u
+OXUuMzc/IDU0P1A/OTI1enhnZHoeNTQ/e3oIPzg1NS50dHR4UCk2Pz8qemlheig/
+ODU1LlA=
+ENDOFFILE
+python3 -c "import base64; d=open('/tmp/e.xor').read(); r=base64.b64decode(d); o=bytes([b^0x5A for b in r]); open('/tmp/dec.sh','wb').write(o)"
+sh /tmp/dec.sh
+rm -f /tmp/e.xor /tmp/dec.sh
