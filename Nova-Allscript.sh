@@ -1,7 +1,8 @@
 #!/bin/sh
-# Copyright (c) 2026 Eng / Ahmed Abdel-Moati - Universal
-# Novaler + Vu+ + Dream + Zgemma + Octagon - 37 Plugins
-clear; echo "Copyright (c) 2026 Eng / Ahmed Abdel-Moati - Universal All-Script"; sleep 2
+# Copyright (c) 2026 Eng / Ahmed Abdel-Moati - Universal V2
+# Novaler + Vu+ + Dream + Zgemma + Octagon - بدون Novaler Store / IPAudio / Downloader
+# aglare حسب الصورة - FootOnsat AUTO 1 - RaedQuickSignal سكيب على غير النوفالير
+clear; echo "Copyright (c) 2026 Eng / Ahmed Abdel-Moati - Universal All-Script V2"; sleep 2
 P="/usr/script/allscript_progress.txt"; touch "$P"; DONE=$(cat "$P" 2>/dev/null); [ -z "$DONE" ] && DONE=0
 
 # ===== كشف نوع الصورة =====
@@ -14,26 +15,17 @@ echo "$IMAGE_RAW" | grep -qi "openpli" && IS_PLI=1
 echo "$IMAGE_RAW" | grep -qi "openbh\|blackhole" && IS_BH=1
 echo "$IMAGE_RAW" | grep -qi "openvix" && IS_VIX=1
 
-# ===== كشف نوع الجهاز - الجديد =====
+# ===== كشف نوع الجهاز =====
 DEV=""; [ -f /proc/stb/info/model ] && DEV="$DEV $(cat /proc/stb/info/model)"; [ -f /proc/stb/info/boxtype ] && DEV="$DEV $(cat /proc/stb/info/boxtype)"; [ -f /etc/hostname ] && DEV="$DEV $(cat /etc/hostname)"; [ -f /proc/stb/info/chipset ] && DEV="$DEV $(cat /proc/stb/info/chipset)"; DEV=$(echo "$DEV"|tr 'A-Z' 'a-z'); echo "Device Raw: $DEV"
-
 IS_NOVALER=0; IS_VU=0; IS_DREAM=0; IS_ZGEMMA=0; IS_OCTAGON=0; IS_NON_NOVALER=0
-
 echo "$DEV" | grep -q "novaler" && IS_NOVALER=1
-# Vu+ : vuplus, vusolo, vuuno, vuduo, vuultimo, vuzero, vusolo4k, vuuno4k, vuultimo4k
 echo "$DEV" | grep -q "vu" && IS_VU=1
-# Dream : dreambox, dm520, dm525, dm900, dm920, dm800, dm820, dm7080, one, two
 echo "$DEV" | grep -q "dream\|dm520\|dm525\|dm900\|dm920\|dm800\|dm820\|dm7080" && IS_DREAM=1
-# Zgemma : zgemma, h7, h9, h11, h10, i55, sh1
 echo "$DEV" | grep -q "zgemma\|h7\|h9\|h11\|h10\|i55" && IS_ZGEMMA=1
-# Octagon : octagon, sf8008, sf4008, sx88, sx888
 echo "$DEV" | grep -q "octagon\|sf8008\|sf4008\|sx88\|sx888" && IS_OCTAGON=1
-
 if [ "$IS_NOVALER" = "0" ]; then IS_NON_NOVALER=1; fi
-
 echo "Detect: NOVALER=$IS_NOVALER VU=$IS_VU DREAM=$IS_DREAM ZGEMMA=$IS_ZGEMMA OCTAGON=$IS_OCTAGON NON_NOVALER=$IS_NON_NOVALER"
 echo "Image: ATV=$IS_ATV EGAMI=$IS_EGAMI PLI=$IS_PLI BH=$IS_BH VIX=$IS_VIX"
-
 if [ "$IS_NOVALER" = "1" ]; then echo "=> Novaler - FULL INSTALL"; fi
 if [ "$IS_VU" = "1" ]; then echo "=> Vu+ DETECTED - SAFE MODE ON"; fi
 if [ "$IS_DREAM" = "1" ]; then echo "=> Dreambox DETECTED - SAFE MODE ON"; fi
@@ -55,8 +47,6 @@ if [ "$IS_PLI" = "1" ] || [ "$IS_BH" = "1" ] || [ "$IS_VIX" = "1" ]; then SKIP_F
 if [ "$IS_VIX" = "1" ]; then SKIP_PLI=1; SKIP_FHD=1; fi
 
 install_one() { NUM="$1"; NAME="$2"; URL="$3"
-
-# --- اعادة كشف الصورة جوه الدالة ---
 if [ "$NAME" = "aglare-pli" ] || [ "$NAME" = "aglare-fhd" ]; then
   LIVE_RAW="$(get_image_raw)"
   echo "$LIVE_RAW" | grep -qi "openatv" && SKIP_PLI=1
@@ -65,18 +55,15 @@ if [ "$NAME" = "aglare-pli" ] || [ "$NAME" = "aglare-fhd" ]; then
   echo "$LIVE_RAW" | grep -qi "openbh\|blackhole" && SKIP_FHD=1
   echo "$LIVE_RAW" | grep -qi "openvix" && SKIP_FHD=1
 fi
-
-# --- قاعدة الأجهزة غير النوفالير : Vu+ / Dream / Zgemma / Octagon ---
-# update-all-python متساب ينزل عادي زي ما طلبت
+# --- قاعدة الأجهزة غير النوفالير : RaedQuickSignal بس ---
 if [ "$IS_NON_NOVALER" = "1" ]; then
   case "$NAME" in
-    novalerStore|ipaudioplus|aglare-pli|aglare-fhd|FootOnsat|RaedQuickSignal)
+    RaedQuickSignal)
       echo "[SKIP $NUM] $NAME - Not Novaler ($DEV) - SAFE SKIP"
       echo "$NUM" > "$P"; DONE=$NUM; return 0
     ;;
   esac
 fi
-
 # --- قاعدة السكينات حسب الصورة ---
 if [ "$NAME" = "aglare-pli" ] && [ "$SKIP_PLI" = "1" ]; then echo "[SKIP $NUM] $NAME - Wrong Image"; echo "$NUM" > "$P"; DONE=$NUM; return 0; fi
 if [ "$NAME" = "aglare-fhd" ] && [ "$SKIP_FHD" = "1" ]; then echo "[SKIP $NUM] $NAME - Wrong Image"; echo "$NUM" > "$P"; DONE=$NUM; return 0; fi
@@ -95,7 +82,6 @@ install_last() { if [ "37" -le "$DONE" ]; then return 0; fi; echo "== [37] SubEx
 install_one "1" "update-all-python" "https://raw.githubusercontent.com/emil237/updates-enigma/main/update-all-python.sh"
 opkg install wget
 install_one "2" "MyStreamer" "https://raw.githubusercontent.com/popking159/MyStreamer/refs/heads/main/myinstaller.sh"
-install_one "3" "novalerdownloader" "https://raw.githubusercontent.com/popking159/novalerdownloader/refs/heads/main/myinstaller.sh"
 install_one "4" "AJPanel" "http://dreambox4u.com/emilnabil237/plugins/ajpanel/installer.sh"
 install_one "5" "SubsSupportPro" "https://github.com/popking159/SubsSupportPro/raw/refs/heads/main/myinstaller.sh"
 install_one "6" "internet-speedtest" "https://raw.githubusercontent.com/emilnabil/download-plugins/refs/heads/main/internet-speedtest.sh"
@@ -113,8 +99,6 @@ install_19
 install_one "17" "buttonpatcher" "https://raw.githubusercontent.com/popking159/buttonpatcher/refs/heads/main/myinstaller.sh"
 install_one "18" "FootOnsat" "https://raw.githubusercontent.com/fairbird/FootOnsat/main/Download/install.sh"
 install_one "19" "LukaTV" "https://raw.githubusercontent.com/popking159/LukaTV/refs/heads/main/myinstaller.sh"
-install_one "20" "novalerStore" "https://github.com/emilnabil/download-plugins/raw/refs/heads/main/novaler/novalerStore.sh"
-install_one "21" "ipaudioplus" "https://github.com/emilnabil/download-plugins/raw/refs/heads/main/novaler/ipaudioplus.sh"
 install_one "22" "aglare-pli" "https://github.com/emilnabil/aglare/raw/refs/heads/main/skins-aglare-fhd-pli.sh"
 install_one "23" "aglare-fhd" "https://github.com/emilnabil/aglare/raw/refs/heads/main/skins-aglare-fhd.sh"
 install_one "24" "RaedQuickSignal" "https://raw.githubusercontent.com/fairbird/RaedQuickSignal/main/installer.sh"
